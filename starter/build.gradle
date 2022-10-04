@@ -6,7 +6,7 @@ buildscript {
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
 
     }
     dependencies {
@@ -14,6 +14,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
         classpath 'com.google.gms:google-services:4.3.3'
+
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -23,7 +24,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
@@ -33,7 +34,7 @@ task clean(type: Delete) {
 ext {
     // Sdk and tools
     // Support library and architecture components support minSdk 14 and above.
-    minSdkVersion = 16
+    minSdkVersion = 30
     targetSdkVersion = 30
     compileSdkVersion = 30
 
@@ -47,16 +48,16 @@ ext {
     materialVersion = '1.1.0'
     fragmentVersion = '1.1.0-alpha07'
     recyclerViewVersion = '1.1.0'
-    mockitoVersion = '2.8.9'
+    mockitoVersion = '3.0.0'
     constraintVersion = '2.0.0-rc1'
     dexMakerVersion = '2.12.1'
     coroutinesVersion = '1.2.1'
     roomVersion = '2.2.5'
-    koinVersion = '2.0.1'
+    koinVersion = '3.0.1'
     truthVersion = '0.44'
     junitVersion = '4.12'
     androidXTestCoreVersion = '1.2.0-beta01'
-    robolectricVersion = '4.3-beta-1'
+    robolectricVersion = '4.5.1'
     androidXTestExtKotlinRunnerVersion = '1.1.1'
     archTestingVersion = '2.0.0'
     playServicesVersion = '17.0.0'

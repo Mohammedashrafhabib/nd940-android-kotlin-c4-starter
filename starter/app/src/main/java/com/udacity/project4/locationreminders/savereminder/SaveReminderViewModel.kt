@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSource) :
     BaseViewModel(app) {
-    val reminderTitle = MutableLiveData<String>()
+    val reminderTitle = MutableLiveData<String?>()
     val reminderDescription = MutableLiveData<String>()
     val reminderSelectedLocationStr = MutableLiveData<String>()
     val selectedPOI = MutableLiveData<PointOfInterest>()
@@ -62,8 +62,8 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
             showToast.value = app.getString(R.string.reminder_saved)
             navigationCommand.value = NavigationCommand.Back
         }
-    }
 
+    }
     /**
      * Validate the entered data and show error to the user if there's any invalid data
      */
