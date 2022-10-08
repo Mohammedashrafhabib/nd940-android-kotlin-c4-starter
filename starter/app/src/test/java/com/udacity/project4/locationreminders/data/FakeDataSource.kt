@@ -12,7 +12,7 @@ class FakeDataSource : ReminderDataSource {
 
             return Result.Success(remindersData.toList())
         }catch (ex:Exception){
-            return Result.Error(ex.message)
+            return Result.Error(ex.localizedMessage)
         }    }
 
     override suspend fun saveReminder(reminder: ReminderDTO) {
@@ -21,10 +21,10 @@ class FakeDataSource : ReminderDataSource {
 
     override suspend fun getReminder(id: String): Result<ReminderDTO> {
         try {
-            val ans= remindersData.find { it.id==id } ?: return Result.Error("Data is not found")
+            val ans= remindersData.find { it.id==id } ?: return Result.Error("Reminder not found!")
             return Result.Success(ans)
         }catch (ex:Exception){
-            return Result.Error(ex.message)
+            return Result.Error(ex.localizedMessage)
         }
     }
 
