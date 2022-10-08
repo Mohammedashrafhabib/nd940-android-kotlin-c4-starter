@@ -218,7 +218,12 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
                     val currentLocation = LatLng(it.latitude, it.longitude)
                     LocationServices.removeLocationUpdates(this)
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17f))
-
+                    val snippet = String.format(
+                        Locale.getDefault(),
+                        "Lat: %1$.5f, Long: %2$.5f",
+                        currentLocation.latitude,
+                        currentLocation.longitude
+                    )
                 }
             }}
         val locationRequest = LocationRequest.create()
@@ -226,8 +231,8 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
         locationRequest.interval = 6000
 
         LocationServices.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+        setPoiClick(map)
         setMapLongClick(map)
-    setPoiClick(map)
         setMapStyle(map)
     }
     private fun setMapStyle(map: GoogleMap) {
@@ -247,6 +252,9 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
     }
     private fun setPoiClick(map: GoogleMap) {
         map.setOnPoiClickListener { poi ->
+            this.latLng=poi.latLng
+            this.locName=poi.name
+            map.clear()
             val poiMarker = map.addMarker(
                 MarkerOptions()
                     .position(poi.latLng)
