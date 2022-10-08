@@ -218,12 +218,7 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
                     val currentLocation = LatLng(it.latitude, it.longitude)
                     LocationServices.removeLocationUpdates(this)
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17f))
-                    val snippet = String.format(
-                        Locale.getDefault(),
-                        "Lat: %1$.5f, Long: %2$.5f",
-                        currentLocation.latitude,
-                        currentLocation.longitude
-                    )
+
                 }
             }}
         val locationRequest = LocationRequest.create()
