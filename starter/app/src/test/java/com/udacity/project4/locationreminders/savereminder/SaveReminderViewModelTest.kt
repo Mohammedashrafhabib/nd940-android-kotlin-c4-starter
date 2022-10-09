@@ -10,10 +10,13 @@ import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.locationreminders.MainCoroutineRule
 import com.udacity.project4.locationreminders.data.FakeDataSource
 import com.udacity.project4.locationreminders.data.ReminderDataSource
+import com.udacity.project4.locationreminders.data.dto.ReminderDTO
+import com.udacity.project4.locationreminders.data.dto.Result
 import com.udacity.project4.locationreminders.getOrAwaitValue
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers
 import org.junit.*
 import org.junit.runner.RunWith
@@ -45,7 +48,7 @@ class SaveReminderViewModelTest {
         stopKoin()
         (reminderDataSource as FakeDataSource).dataSourceClear()
     }
-
+//input data in livedata then clearing livedata and checking its null
     @Test
     fun onClearShouldClearReminderData() {
         val reminderDescription = "description"
@@ -71,7 +74,7 @@ class SaveReminderViewModelTest {
         Assert.assertThat(saveReminderViewModel.reminderTitle.getOrAwaitValue(),CoreMatchers.nullValue())
 
     }
-
+//input everything valid except title is empty check snackbar
     @Test
     fun validateAndSaveReminderWhenTitleIsEmptyThenShowSnackBarWithErrorMessage() {
         val reminderData = ReminderDataItem(
@@ -88,7 +91,7 @@ class SaveReminderViewModelTest {
 
         verify(mockObserver).onChanged(R.string.err_enter_title)
     }
-
+//input everything valid check snackbar
     @Test
     fun validateAndSaveReminderWhenTitleIsNotEmptyAndLocationIsNotEmptyThenSaveReminder() {
         val reminderData = ReminderDataItem(
@@ -99,9 +102,14 @@ class SaveReminderViewModelTest {
             2.0
         )
 
-
+        val mockObserver = mock(Observer::class.java) as Observer<Int>
+        saveReminderViewModel.showSnackBarInt.observeForever(mockObserver)
         saveReminderViewModel.validateAndSaveReminder(reminderData)
+        verify(mockObserver).onChanged(R.string.reminder_saved)
+
     }
+    //input everything valid except location is empty
+
     @Test
     fun validateEnteredDataWhenLocationIsEmptyThenReturnFalse() {
         val reminderData = ReminderDataItem(
@@ -114,6 +122,7 @@ class SaveReminderViewModelTest {
         val result = saveReminderViewModel.validateEnteredData(reminderData)
         Assert.assertThat(result,CoreMatchers.`is` (false))
     }
+//input everything valid except title is empty
 
     @Test
     fun validateEnteredDataWhenTitleIsEmptyThenReturnFalse() {
@@ -127,7 +136,7 @@ class SaveReminderViewModelTest {
         val result = saveReminderViewModel.validateEnteredData(reminderData)
         Assert.assertThat(result,CoreMatchers.`is` (false))
     }
-
+//test saving to datasource
     @Test
     fun saveReminderWhenMethodIsCalledThenCallDataSourceSaveReminder() {
         val reminderData = ReminderDataItem(
@@ -138,8 +147,13 @@ class SaveReminderViewModelTest {
             2.0
         )
         this.saveReminderViewModel.saveReminder(reminderData)
+        runBlockingTest {
+            val res = reminderDataSource.getReminder(reminderData.id)
+            Assert.assertThat(res is Result.Success<ReminderDTO>,CoreMatchers.`is`(true) )
+        }
 
     }
+    // check lodaing while saving and check toast and check navigationCommand
     @Test
     fun saveReminderWhenMethodIsCalledThenShowLoading() {
         val reminderData = ReminderDataItem(

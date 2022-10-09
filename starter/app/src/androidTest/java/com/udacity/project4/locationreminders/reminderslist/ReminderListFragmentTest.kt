@@ -44,6 +44,10 @@ class ReminderListFragmentTest:KoinTest {
 
     private val bindingIdlingResource = DataBindingIdlingResource()
     private lateinit var reminderDataSource: ReminderDataSource
+    /*
+     * As we use Koin as a Service Locator Library to develop our code, we'll also use Koin to test our code.
+     * at this step we will initialize Koin related code to be able to use it in our testing.
+     */
     @Before
     fun init() {
         stopKoin()
@@ -82,6 +86,7 @@ class ReminderListFragmentTest:KoinTest {
     fun unregisterBinding() {
         IdlingRegistry.getInstance().unregister(bindingIdlingResource)
     }
+    //test list  if shown correctly then test navigation to add reminder screen
     @Test
     fun navigateToAddNewReminder()= runBlocking{
 
@@ -102,6 +107,7 @@ class ReminderListFragmentTest:KoinTest {
         onView(withId(R.id.addReminderFAB)).perform(click())
         verify(navController).navigate(ReminderListFragmentDirections.toSaveReminder())
     }
+    //test what is shown when database is empty
     @Test
     fun emptyDataBaseScenario(){
         val fragmentTest = launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)

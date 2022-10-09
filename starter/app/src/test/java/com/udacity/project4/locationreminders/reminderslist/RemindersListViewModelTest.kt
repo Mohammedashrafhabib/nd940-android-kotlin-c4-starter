@@ -42,7 +42,7 @@ class RemindersListViewModelTest {
         stopKoin()
         (reminderDataSource as FakeDataSource).dataSourceClear()
     }
-
+//check loading when finished
     @Test
     fun loadRemindersShouldHideLoadingWhenMethodIsFinished() {
 
@@ -50,7 +50,7 @@ class RemindersListViewModelTest {
 
         assertEquals(false, ReminderListViewModel.showLoading.value)
     }
-
+    //check loading when called then when finished
     @Test
     fun loadRemindersShouldShowLoadingWhenMethodIsCalled() {
         mainCoroutineRule.pauseDispatcher()

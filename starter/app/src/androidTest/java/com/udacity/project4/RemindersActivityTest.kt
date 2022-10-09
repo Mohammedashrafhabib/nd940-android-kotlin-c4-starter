@@ -48,9 +48,9 @@ class RemindersActivityTest:KoinTest {// Extended Koin Test - embed autoclose @a
     private val dataBindingResource = DataBindingIdlingResource()
 
 
-    /**
+    /*
      * As we use Koin as a Service Locator Library to develop our code, we'll also use Koin to test our code.
-     * at this step we will initialize Koin related code to be able to use it in out testing.
+     * at this step we will initialize Koin related code to be able to use it in our testing.
      */
     @Before
     fun init() {
@@ -89,12 +89,12 @@ class RemindersActivityTest:KoinTest {// Extended Koin Test - embed autoclose @a
     fun unregisterBinding() {
         IdlingRegistry.getInstance().unregister(dataBindingResource)
     }
-
+//end-to-end of normal use case open app then add reminder then save then check its details
     @Test
     fun addTaskAndCheck(){
         val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
         dataBindingResource.monitorActivity(activityScenario =activityScenario )
-        onView(ViewMatchers.withText("No Data"))
+        onView(withText("No Data"))
         onView(withId(R.id.addReminderFAB)).perform(click())
         onView(withId(R.id.saveReminder)).perform(click())
         onView(withText(R.string.err_enter_title))
@@ -115,6 +115,5 @@ class RemindersActivityTest:KoinTest {// Extended Koin Test - embed autoclose @a
 fun finish(){
     stopKoin()
 }
-//    TODO: add End to End testing to the app
 
 }

@@ -35,6 +35,7 @@ class RemindersDaoTest {
     fun closeDataBase() {
         remindersDatabase.close()
     }
+    //add task to database then check if saved correctly
     @Test
     fun addTaskAndCheckDataBase()=runBlockingTest{
         val reminder=  ReminderDTO("reminder","test1","location1",565.33,565.33)
