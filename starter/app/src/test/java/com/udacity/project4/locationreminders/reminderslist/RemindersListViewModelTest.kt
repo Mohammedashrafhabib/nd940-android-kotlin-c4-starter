@@ -7,13 +7,12 @@ import com.google.firebase.FirebaseApp
 import com.udacity.project4.locationreminders.MainCoroutineRule
 import com.udacity.project4.locationreminders.data.FakeDataSource
 import com.udacity.project4.locationreminders.data.ReminderDataSource
+import com.udacity.project4.locationreminders.getOrAwaitValue
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.hamcrest.CoreMatchers
+import org.junit.*
 import org.junit.runner.RunWith
 import org.koin.core.context.stopKoin
 
@@ -21,7 +20,7 @@ import org.koin.core.context.stopKoin
 @ExperimentalCoroutinesApi
 class RemindersListViewModelTest {
 
-    private lateinit var reminderDataSource: ReminderDataSource
+    private lateinit var reminderDataSource: FakeDataSource
     private lateinit var ReminderListViewModel: RemindersListViewModel
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
@@ -62,5 +61,13 @@ class RemindersListViewModelTest {
         assertEquals(false, ReminderListViewModel.showLoading.value)
 
     }
+    //check what happens when database throws an error
+    @Test
+    fun checkError(){
+        reminderDataSource.setReturnError(true)
+        ReminderListViewModel.loadReminders()
+        Assert.assertThat(ReminderListViewModel.showSnackBar.getOrAwaitValue(), CoreMatchers.`is`("DataBase Error"))
+        reminderDataSource.setReturnError(false)
 
+    }
 }

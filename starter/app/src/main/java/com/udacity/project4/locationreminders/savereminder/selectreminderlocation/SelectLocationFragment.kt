@@ -164,7 +164,6 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
     private fun enableMyLocation() {
         if (isPermissionGranted()) {
             map.isMyLocationEnabled = true
-            enableGeo()
 
         }
         else {
@@ -187,26 +186,11 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
         if (isGranted) {
             enableMyLocation()
         } else {
-            enableMyLocation()
+            Toast.makeText(context,"This application require your location to fully work", Toast.LENGTH_LONG).show()
+        }
+    }
 
-        }
-    }
-    private fun isGeoPermissionGranted() : Boolean {
-        return this.context?.let {
-            ContextCompat.checkSelfPermission(
-                it,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-        } === PackageManager.PERMISSION_GRANTED
-    }
-    @SuppressLint("MissingPermission")
-    private fun enableGeo() {
-        if (isGeoPermissionGranted()) {
 
-        }
-        else {
-            requestPermissionLauncher.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-        }
-    }
     @SuppressLint("MissingPermission")
     override fun onMapReady(p0: GoogleMap) {
 

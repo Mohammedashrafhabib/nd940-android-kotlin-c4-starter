@@ -21,7 +21,9 @@ import com.udacity.project4.locationreminders.data.local.RemindersLocalRepositor
 import com.udacity.project4.locationreminders.reminderslist.RemindersListViewModel
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.util.DataBindingIdlingResource
+import com.udacity.project4.util.ToastMatcher
 import com.udacity.project4.util.monitorActivity
+import com.udacity.project4.utils.EspressoIdlingResource
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.not
@@ -83,10 +85,15 @@ class RemindersActivityTest:KoinTest {// Extended Koin Test - embed autoclose @a
     }
     @Before
     fun registerBinding() {
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
+
         IdlingRegistry.getInstance().register(dataBindingResource)
     }
+
     @After
     fun unregisterBinding() {
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
+
         IdlingRegistry.getInstance().unregister(dataBindingResource)
     }
 //end-to-end of normal use case open app then add reminder then save then check its details
@@ -102,11 +109,12 @@ class RemindersActivityTest:KoinTest {// Extended Koin Test - embed autoclose @a
         onView(withId(R.id.reminderTitle)).perform(replaceText("Test"))
         onView(withId(R.id.reminderDescription)).perform(replaceText("descrption"))
         onView(withId(R.id.selectLocation)).perform(click())
-        onView(withId(R.id.mapView)).perform(longClick())
         Thread.sleep(3000)
+        onView(withId(R.id.mapView)).perform(longClick())
         onView(withId(R.id.savebtn)).perform(click())
         onView(withId(R.id.saveReminder)).perform(click())
-        onView(withText("Test")).check(matches(isDisplayed()))
+    onView(withText(R.string.reminder_saved)).inRoot(ToastMatcher().apply {matches(isDisplayed())})
+    onView(withText("Test")).check(matches(isDisplayed()))
         onView(withText("Test")).perform(click())
         activityScenario.close()
     }

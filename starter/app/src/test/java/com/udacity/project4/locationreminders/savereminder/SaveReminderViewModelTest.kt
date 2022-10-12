@@ -102,10 +102,10 @@ class SaveReminderViewModelTest {
             2.0
         )
 
-        val mockObserver = mock(Observer::class.java) as Observer<Int>
-        saveReminderViewModel.showSnackBarInt.observeForever(mockObserver)
+        val mockObserver = mock(Observer::class.java) as Observer<String>
+        saveReminderViewModel.showToast.observeForever(mockObserver)
         saveReminderViewModel.validateAndSaveReminder(reminderData)
-        verify(mockObserver).onChanged(R.string.reminder_saved)
+        verify(mockObserver).onChanged("Reminder Saved !")
 
     }
     //input everything valid except location is empty
