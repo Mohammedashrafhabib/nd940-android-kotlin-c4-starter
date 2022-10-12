@@ -66,7 +66,7 @@ class RemindersListViewModelTest {
     fun checkError(){
         reminderDataSource.setReturnError(true)
         ReminderListViewModel.loadReminders()
-        Assert.assertThat(ReminderListViewModel.showSnackBar.getOrAwaitValue(), CoreMatchers.`is`("DataBase Error"))
+        assertEquals("DataBase Error",ReminderListViewModel.showSnackBar.getOrAwaitValue())
         reminderDataSource.setReturnError(false)
 
     }
