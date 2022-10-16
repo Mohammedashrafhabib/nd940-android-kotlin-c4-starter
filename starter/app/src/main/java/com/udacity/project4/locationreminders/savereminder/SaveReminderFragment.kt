@@ -117,6 +117,12 @@ private fun isGeoPermissionGranted() : Boolean {
             Manifest.permission.ACCESS_BACKGROUND_LOCATION)
     } === PackageManager.PERMISSION_GRANTED
 }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_TURN_DEVICE_LOCATION_ON) {
+            checkDeviceLocationSettingsAndStartGeofence(false)
+        }
+    }
     @SuppressLint("MissingPermission")
     private fun checkDeviceLocationSettingsAndStartGeofence(resolve:Boolean = true) {
         val locationRequest = LocationRequest.create().apply {
@@ -129,8 +135,8 @@ private fun isGeoPermissionGranted() : Boolean {
         locationSettingsResponseTask.addOnFailureListener { exception ->
             if (exception is ResolvableApiException && resolve){
                 try {
-                    exception.startResolutionForResult(this.requireActivity(),
-                        REQUEST_TURN_DEVICE_LOCATION_ON)
+                    this.startIntentSenderForResult(exception.resolution.intentSender, REQUEST_TURN_DEVICE_LOCATION_ON, null, 0, 0, 0, null)
+
                 } catch (sendEx: IntentSender.SendIntentException) {
                     Toast.makeText(context,sendEx.message, Toast.LENGTH_LONG).show()
                 }
